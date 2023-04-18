@@ -526,7 +526,9 @@ impl Status {
 
     /// Add headers from this `Status` into `header_map`.
     pub fn add_header(&self, header_map: &mut HeaderMap) -> Result<(), Self> {
-        header_map.extend(self.metadata.clone().into_sanitized_headers());
+        if !self.metadata.is_empty() {
+            header_map.extend(self.metadata.clone().into_sanitized_headers());
+        }
 
         header_map.insert(GRPC_STATUS_HEADER_CODE, self.code.to_header_value());
 
